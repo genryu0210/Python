@@ -47,3 +47,8 @@ ax.bar(x2, y2, tick_label=label, label="y2", width=width)
 ax.set_title("sample_style")
 ax.legend()
 plt.show()
+
+data_url = "http://lib.stat.cmu.edu/datasets/boston"
+raw_df = pd.read_csv(data_url, skiprows=22, header=None)
+data = np.hstack([raw_df.values[::2, :], raw_df.values[1::2, :2]])
+target = raw_df.values[1::2, 2]
