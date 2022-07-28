@@ -18,14 +18,14 @@ m_d = str(now.strftime("%m/%d"))
 excel = win32com.client.Dispatch("Excel.Application")
 
 try:
-    with open(r"C:\Users\406429\Downloads\申請書集約.xlsx") as f:
+    with open(r"fileppass.xlsx") as f:
         _ = 0
 except FileNotFoundError:
-    downloads = excel.Workbooks.open(r"C:\Users\406429\KYUDENKO CORPORATION\DX推進部 - 100_Forms申請\申請書集約.xlsx")
-    downloads.SaveAs(r"C:\Users\406429\Downloads\申請書集約.xlsx")
+    downloads = excel.Workbooks.open(r"C:filepass.xlsx")
+    downloads.SaveAs(r"filepass.xlsx")
 
-wb = excel.Workbooks.open(r"C:\Users\406429\KYUDENKO CORPORATION\DX推進部 - 100_Forms申請\申請書集約.xlsx")
-today_format = excel.Workbooks.Open(r"C:\Users\406429\PycharmProjects\python_programming\MXM様申請\00【九電工様】各種申請書_Ver2.8_yyyymmdd.xlsm")
+wb = excel.Workbooks.open(r"C:filepass.xlsx")
+today_format = excel.Workbooks.Open(r"filepass.xlsm")
 today_format.Save()
 request = openpyxl.load_workbook(r"C:\Users\406429\Downloads\申請書集約.xlsx")
 today_request = openpyxl.load_workbook("00【九電工様】各種申請書_Ver2.8_yyyymmdd.xlsm", keep_vba=True, data_only=True)
@@ -142,12 +142,12 @@ if count5 > 6:
     request_info.cell(row=18, column=3).value = str(count5 - 6) + "件"
 
 try:
-    with open(r"C:\Users\406429\Dropbox (株式会社九電工)\【スマホPJ】展開運用\60_運用\50_申請_通常\01_MX送付分\【九電工様】各種申請書_Ver2.8_" + date + ".xlsm") as f:
+    with open(r"C:filepass" + date + ".xlsm") as f:
         raise AlreadyExistError
 except AlreadyExistError:
     pass
 
 today_request.save(
-    r"C:\Users\406429\Dropbox (株式会社九電工)\【スマホPJ】展開運用\60_運用\50_申請_通常\01_MX送付分\【九電工様】各種申請書_Ver2.8_" + date + ".xlsm")
+    r"C:filepass" + date + ".xlsm")
 request.save("xx申請書集約.xlsx")
 
