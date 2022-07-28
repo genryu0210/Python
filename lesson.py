@@ -18,6 +18,7 @@ X0_square = X0.reshape(8, 8)
 
 fig, ax = pyplot.subplots()
 ax.imshow(X0_square, cmap="binary")
+AAAAAAAAAAAAAaaaaaaaaaaaaaa
 """
 
 np.random.seed(111)
