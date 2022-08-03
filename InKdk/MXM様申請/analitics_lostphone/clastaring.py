@@ -1,9 +1,11 @@
-import pandas
+import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
 from tqdm import tqdm
 import datetime
-
+from sklearn import preprocessing
+import logging
+logging.basicConfig()
 t_delta = datetime.timedelta(hours=9)
 JST = datetime.timezone(t_delta, "JST")
 now = datetime.datetime.now(JST)
@@ -11,6 +13,7 @@ date = now.strftime(("%Y%m%d"))
 database = pd.read_excel("created.xlsx", dtype=object, index_col=None)
 mail_adress_list = pd.read_excel("3_メールアドレスリスト_2022.06(6月在籍者).xlsx", dtype=object, index_col=None)
 df = pd.read_csv("test.csv", index_col=None, dtype=object)
+mail_adress_list["性別"] = mail_adress_list["性別"].astype(int)
 columns = df.columns
 columns = columns.drop(columns[7])
 columns = columns.drop(columns[5])
@@ -43,17 +46,23 @@ for i in range(len(df)):
 taiou = pd.DataFrame(data=df[["本支店名", "割合"]]).drop_duplicates()
 df = df.drop(["氏名（漢字）"], axis=1)
 df = df.drop(["社員番号"], axis=1)
-df = df.drop(["本支店名"], axis=1)
 df["年齢"] = 0
+df["性別"] = df["性別"].fillna(0)
+df["生年月日"] = df["生年月日"].fillna(0)
 for age in df["生年月日"]:
+    if age == 0:
+        continue
     num = df[df["生年月日"] == age]["生年月日"].index
     df["年齢"][num] = int(int(int(date) - int(pd.to_datetime(age).strftime("%Y%m%d"))) / 10000)
-drop0 = df[df["年齢"]>0]
-mean = drop0.mean()
-mean = mean.iloc[[2, 0]]
-df_sc = pd.get_dummies(df, drop_first=True)
-
-model = KMeans(n_clusters=4, random_state=1)
+means = float(df[df["年齢"]>0]["年齢"].mean())
+df["年齢"] = df["年齢"].replace(0, means)
+df = df.drop("生年月日", axis=1)
+df["性別"] = df["性別"].replace(0, "men")
+df["性別"] = df["性別"].replace(1, "women")
+df["年齢"] = preprocessing.minmax_scale(df["年齢"])
+df["割合"] = preprocessing.minmax_scale(df["割合"])
+df_sc = pd.get_dummies(df, drop_first=False)
+model = KMeans(n_clusters=4)
 model.fit(df_sc)
 
 cluster = model.labels_

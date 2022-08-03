@@ -1,6 +1,5 @@
 import pandas as pd
 import os
-import csv
 
 path_lists = os.listdir(os.path.dirname(__file__))
 print(path_lists)
@@ -21,7 +20,6 @@ for path in path_lists:
             phone_number_df = pd.DataFrame(data=[[phone_number, 0, 0, 0, 0, 0, 0, 0]], columns=columns)
             phone_numbers_df = pd.concat([phone_numbers_df, phone_number_df], ignore_index=True)
 
-# counted_num_list = pd.DataFrame(data=phone_numbers_df.value_counts()).reset_index()
 counted_num_list = phone_numbers_df.drop(columns=["Count"])
 for i in range(len(counted_num_list)):
     for j in range(len(database)):
@@ -30,14 +28,6 @@ for i in range(len(counted_num_list)):
                 if column == "PhoneNumber" or column == "Count":
                     continue
                 counted_num_list[column][i] = database[column][j]
-                """
-                counted_num_list["社員番号"][i] = database["社員番号"][j]
-                counted_num_list["氏名（漢字）"][i] = database["氏名（漢字）"][j]
-                counted_num_list["機種名"][i] = database["機種名"][j]
-                counted_num_list["所属組織コード"][i] = database["所属組織コード"][j]
-                counted_num_list["本支店名"][i] = database["本支店名"][j]
-                counted_num_list["所属組織名"][i] = database["所属組織名称"][j]
-"""
 
 try:
     count1 = 0
